@@ -1,0 +1,6 @@
+target/
+.vscode/
+*.fmt
+*.trace
+mkmf.log
+lib/corvus_ruby.so

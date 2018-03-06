@@ -1,0 +1,13 @@
+[package]
+name = "corvus_ruby"
+version = "0.1.0"
+authors = ["Stephen Sugden <me@stephensugden.com>"]
+
+[lib]
+crate-type = ["dylib"]
+
+[dependencies]
+ruru = { git = "https://github.com/d-unseductable/ruru", rev = "587f1c40b741c5e62bf9bf8736c0158f8cd5210e" }
+ruby-sys = "0.3"
+corvus_core = { git = "https://github.com/corvuslang/corvus_core", branch = "develop" }
+lazy_static = "*"

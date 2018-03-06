@@ -1,0 +1,29 @@
+PATH
+  remote: .
+  specs:
+    corvus (0.1.0)
+      thermite (~> 0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitar (0.6.1)
+    minitest (5.11.3)
+    rake (12.3.0)
+    thermite (0.13.0)
+      minitar (~> 0.5)
+      rake (>= 10)
+      tomlrb (~> 1.2)
+    tomlrb (1.2.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  corvus!
+  minitest (~> 5.0)
+  rake (~> 12.3)
+
+BUNDLED WITH
+   1.16.1
