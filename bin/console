@@ -1,14 +1,60 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "corvus"
+require 'bundler/setup'
+require 'corvus'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+# First, setup code that would happen in e.g. a Rails initializer
+C = Corvus::Compiler.new
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+# Define type aliases
+C.types.instance_eval do
+  define 'Person', name: :string, age: :number
+  define 'LatLon', lat: :number, lon: :number
+  define 'Promo', name: :string, end_date: { type: :time, optional: true }
+  define 'Partner', name: :string, current_promos: list_of('Promo')
+  define 'Location', partner: 'Partner', street_address: :string, latlon: 'LatLon'
+end
 
-require "irb"
+C.define do |fn|
+  fn.arg 'empty', C.types.list_of('any')
+  fn.returns 'boolean'
+  fn.total!
+  fn.callback do |args|
+    args['empty'].empty?
+  end
+end
+
+# Define a function that looks up nearby places in a database
+C.define do |fn|
+  fn.arg 'nearby', 'LatLon'
+  fn.arg 'radius', 'number', optional: true
+  fn.returns C.types.list_of('Location')
+  fn.partial! # database queries might fail!
+  fn.callback do |_args|
+    raise 'Unimplemented'
+  end
+end
+
+# And another for calculating distance
+C.define do |fn|
+  fn.arg 'distanceBetween', 'LatLon'
+  fn.arg 'and', 'LatLon'
+  fn.returns 'number'
+  fn.total! # given correct inputs, this will always succeed
+  fn.callback do |_args|
+    raise 'Unimplemented'
+  end
+end
+
+# An example script, you can imagine this script coming from
+# lots of different places, even at runtime.
+FindPromos = C.compile \
+  'each: { nearby: here }
+   do: { there => [ partner = there.partner
+                    address = there.street_address
+                    promos = each: there.partner.current_promos
+                             do: { promo => promo.name }
+                    distance = distanceBetween: here and: there ]}'
+
+require 'irb'
 IRB.start(__FILE__)
