@@ -19,6 +19,15 @@ module Corvus
       end
     end
 
+    def list_of(type)
+      Type.list(resolve(type))
+    end
+
+    def block(from:, to:)
+      rslv = method(:resolve)
+      Type.block(from.map(&rslv), resolve(to))
+    end
+
     protected
 
     def resolve_by_name(name)
@@ -42,7 +51,7 @@ module Corvus
     end
 
     def resolve_field(field)
-      if field.is_a?(Symbol) || field.is_a?(String) || field.is_a?(CorvusType)
+      if field.is_a?(Symbol) || field.is_a?(String) || field.is_a?(Type)
         { type: resolve(field), optional: false }
       else
         { type: resolve(field[:type]), optional: !!field[:optional] }

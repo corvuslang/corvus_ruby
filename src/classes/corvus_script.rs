@@ -93,6 +93,9 @@ impl CorvusScript {
   }
 }
 
+attr_reader!(CorvusScript, corvus_script_input_types, input_types);
+attr_reader!(CorvusScript, corvus_script_return_type, return_type);
+attr_reader!(CorvusScript, corvus_script_ruby_code, ruby_code);
 
 fn type_env_to_ruby_hash(env: HashMap<String, Type>) -> Hash {
   let mut hash = Hash::new();
@@ -107,8 +110,9 @@ pub fn init() {
     class.def_self("new", corvus_script_disallow_new);
     class.def("corvus_call", corvus_script_private_corvus_call);
     class.def("call_interpreted", corvus_script_interpret);
-    attr_reader!(class, CorvusScript, corvus_script_input_types, input_types);
-    attr_reader!(class, CorvusScript, corvus_script_return_type, return_type);
-    attr_reader!(class, CorvusScript, corvus_script_ruby_source, ruby_source);
+
+    class.def("input_types", corvus_script_input_types);
+    class.def("return_type", corvus_script_return_type);
+    class.def("ruby_code", corvus_script_ruby_code);
   });
 }

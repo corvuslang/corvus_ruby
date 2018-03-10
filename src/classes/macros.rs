@@ -13,16 +13,14 @@ macro_rules! verify_with_class_name {
 }
 
 macro_rules! attr_reader {
-  ($class:ident, $type_name:ident, $fn_name:ident, $var_name:ident) => {
+  ($type_name:ident, $fn_name:ident, $var_name:ident) => {
     pub extern "C" fn $fn_name(
       _argc: ::ruru::types::Argc,
       _argv: *const ::ruru::AnyObject,
       itself: $type_name,
     ) -> ::ruru::AnyObject {
-      itself.instance_variable_get(concat!("@", stringify!(var_name)))
+      itself.instance_variable_get(concat!("@", stringify!($var_name)))
     }
-
-    $class.def(stringify!(var_name), $fn_name);
   };
 }
 

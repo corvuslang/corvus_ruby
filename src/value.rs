@@ -140,6 +140,10 @@ impl IValue for CorvusValue {
     self.non_nil(|v| v.try_convert_to().map(Record))
   }
 
+  fn callable(&self) -> bool {
+    self.1 != None || self.0.try_convert_to::<Proc>().is_ok()
+  }
+
   fn try_call(&self, args: &[CorvusValue]) -> Result<CorvusValue, Error> {
     match self.1 {
       Some(ref block) => block.call(args),
